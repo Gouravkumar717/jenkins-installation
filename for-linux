@@ -22,7 +22,3 @@ sudo usermod -aG docker jenkins
 sudo systemctl restart jenkins
 docker run hello-world
 sudo amazon-linux-extras enable docker
-sudo yum install docker -y
-sudo systemctl start docker
-sudo systemctl enable docker
-sudo yum install -y docker
