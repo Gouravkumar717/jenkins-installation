@@ -1,0 +1,33 @@
+# java
+apt install openjdk-11-jre-headless  # version 11.0.26+4-1ubuntu1~22.04, or
+apt install default-jre              # version 2:1.11-72build2
+apt install openjdk-17-jre-headless  # version 17.0.14+7-1~22.04.1
+apt install openjdk-18-jre-headless  # version 18.0.2+9-2~22.04
+apt install openjdk-19-jre-headless  # version 19.0.2+7-0ubuntu3~22.04
+apt install openjdk-21-jre-headless  # version 21.0.6+7-1~22.04.1
+apt install openjdk-8-jre-headless   # version 8u442-b06~us1-0ubuntu1~22.04
+
+
+# maven
+apt install maven -y
+# jenkins 
+sudo wget -O /etc/apt/keyrings/jenkins-keyring.asc \
+  https://pkg.jenkins.io/debian/jenkins.io-2023.key
+echo "deb [signed-by=/etc/apt/keyrings/jenkins-keyring.asc]" \
+  https://pkg.jenkins.io/debian binary/ | sudo tee \
+  /etc/apt/sources.list.d/jenkins.list > /dev/null
+sudo apt-get update
+sudo apt-get install jenkins
+
+# docker
+sudo apt update
+sudo apt install docker.io -y
+sudo systemctl start docker
+sudo systemctl enable docker
+
+# To avoid permission issues, add Jenkins (or your user) to the Docker group
+sudo usermod -aG docker $USER
+
+sudo systemctl enable jenkins
+sudo systemctl start jenkins
+sudo systemctl status jenkins
