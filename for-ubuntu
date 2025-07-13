@@ -17,7 +17,7 @@ echo "deb [signed-by=/etc/apt/keyrings/jenkins-keyring.asc]" \
   https://pkg.jenkins.io/debian binary/ | sudo tee \
   /etc/apt/sources.list.d/jenkins.list > /dev/null
 sudo apt-get update
-sudo apt-get install jenkins
+sudo apt-get install jenkins -y
 
 # docker
 sudo apt update
@@ -27,7 +27,14 @@ sudo systemctl enable docker
 
 # To avoid permission issues, add Jenkins (or your user) to the Docker group
 sudo usermod -aG docker $USER
+# git
+apt install git -y
 
 sudo systemctl enable jenkins
 sudo systemctl start jenkins
 sudo systemctl status jenkins
+
+jenkins --version
+java --version
+mvn --version
+git --verion
