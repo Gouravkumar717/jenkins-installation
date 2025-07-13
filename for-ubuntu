@@ -38,3 +38,5 @@ jenkins --version
 java --version
 mvn --version
 git --verion
+
+systemctl restart jenkins
