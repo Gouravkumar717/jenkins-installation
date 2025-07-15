@@ -1,1 +1,101 @@
 
+#✅ What You Did (Step-by-Step Explanation):
+#🔹 1. Checked memory and swap:
+#bash
+#Copy
+#Edit
+free -kh
+#Showed:
+
+#Mem: ~949Mi
+
+#Swap: 0B (no swap configured)
+
+#🔹 2. Created a swap file of ~1GB:
+##Copy
+#Edit
+#dd if=/dev/zero of=/newswap bs=512 count=2000000
+#Created a 1GB file filled with zeroes.
+
+#bs=512 (block size), count=2000000 blocks → 512 * 2000000 = 1.02GB
+
+#🔹 3. Formatted it as swap:
+#bash
+#Copy
+#Edit
+#mkswap /newswap
+#Initialized it as a swap area.
+
+#🔹 4. Fixed permissions:
+#bash
+#Copy
+#Edit
+#chmod 600 /newswap
+#For security: only root can read/write.
+
+#🔹 5. Enabled the swap file:
+#bash
+#Copy
+#Edit
+#swapon /newswap
+#Activated the swap file.
+
+#🔹 6. Verified it:
+#bash
+#Copy
+#Edit
+#swapon -s
+
+#output showed:
+
+#/newswap is now being used as swap.
+----------------------------------
+free -kh
+dd if=/dev/zero of=/newswap bs=512 count=2000000
+mkswap /newswap
+chmod 600 /newswap
+swapon /newswap
+swapon -s
+
+or 
+--------------------vi swap.sh
+#!/bin/bash
+
+# Step 1: Create a 1GB swap file
+echo "[+] Creating swap file..."
+fallocate -l 1G /newswap || dd if=/dev/zero of=/newswap bs=1M count=1024
+
+# Step 2: Set permissions
+chmod 600 /newswap
+echo "[+] Permissions set to 600."
+
+# Step 3: Format as swap
+mkswap /newswap
+echo "[+] Swap area created."
+
+# Step 4: Enable swap
+swapon /newswap
+echo "[+] Swap activated."
+
+# Step 5: Make swap persistent
+if ! grep -q '/newswap' /etc/fstab; then
+  echo '/newswap swap swap defaults 0 0' >> /etc/fstab
+  echo "[+] Swap added to /etc/fstab for persistence."
+else
+  echo "[!] /newswap already in /etc/fstab."
+fi
+
+# Step 6: Restart Jenkins agent (if applicable)
+if systemctl list-units --type=service | grep -q jenkins; then
+  systemctl restart jenkins
+  echo "[+] Jenkins restarted."
+else
+  echo "[!] Jenkins service not found. Restart manually if needed."
+fi
+
+# Final check
+echo "[INFO] Current swap status:"
+swapon --show
+
+
+
